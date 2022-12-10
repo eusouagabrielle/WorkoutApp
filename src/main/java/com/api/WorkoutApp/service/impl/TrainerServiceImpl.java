@@ -7,10 +7,11 @@ import com.api.WorkoutApp.model.Trainer;
 import com.api.WorkoutApp.repository.TrainerRepository;
 import com.api.WorkoutApp.service.TrainerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
 public class TrainerServiceImpl implements TrainerService {
 
     private TrainerRepository trainerRepository;

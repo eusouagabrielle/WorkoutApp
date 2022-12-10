@@ -24,4 +24,20 @@ public class GlobalExceptionHandler {
         errorObject.setMessage(err.getMessage());
         return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RoutineNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleRoutineNotFoundException (RoutineNotFoundException err, WebRequest request){
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(err.getMessage());
+        return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(ExerciseNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleExerciseNotFoundException (ExerciseNotFoundException err, WebRequest request){
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(err.getMessage());
+        return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.NOT_FOUND);
+    }
+
 }
