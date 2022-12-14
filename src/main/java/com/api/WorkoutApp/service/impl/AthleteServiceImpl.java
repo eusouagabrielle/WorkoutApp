@@ -29,8 +29,16 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public AthleteDto getAthleteById(Long id) {
+
         Athlete athlete = athleteRepository.findById(id).orElseThrow(() ->
                 new AthleteNotFoundException("Athlete could not be found"));
+        return mapToDto(athlete);
+    }
+
+    @Override
+    public AthleteDto getAthleteByName(String name) {
+        Athlete athlete = athleteRepository.findByName(name).orElseThrow(()-> new AthleteNotFoundException("Athlete" +
+                "could not be found"));
         return mapToDto(athlete);
     }
 

@@ -9,6 +9,8 @@ public interface AthleteService {
     List<AthleteDto> getAthletesByTrainersId(Long id);
     AthleteDto getAthleteById(Long id);
 
+    AthleteDto getAthleteByName(String name);
+
     AthleteDto updateAthlete(AthleteDto dto, Long id);
 
     void deleteAthlete(Long id);
