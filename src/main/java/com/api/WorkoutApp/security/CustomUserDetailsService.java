@@ -1,41 +1,48 @@
 package com.api.WorkoutApp.security;
 
-import com.api.WorkoutApp.model.Role;
-import com.api.WorkoutApp.model.UserModel;
+import com.api.WorkoutApp.dto.UserDto;
+import com.api.WorkoutApp.model.Authority;
+import com.api.WorkoutApp.model.User;
 import com.api.WorkoutApp.repository.UserRepository;
+import com.api.WorkoutApp.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserServiceImpl userServiceImpl;
 
-    @Autowired
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(UserServiceImpl userServiceImpl) {
+        this.userServiceImpl = userServiceImpl;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserModel user = userRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException(
-                "Username not found "));
-        return new User(user.getUsername(),user.getPassword(),rolesToAuthorities(user.getRoles()));
-    }
+    public UserDetails loadUserByUsername(String username){
+        UserDto userDto = userServiceImpl.getUser(username);
 
-    private Collection<GrantedAuthority> rolesToAuthorities(List<Role> roles){
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
+        String password = userDto.getPassword();
 
+        Set<Authority> authorities = userDto.getAuthorities();
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        for (Authority authority: authorities) {
+            grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+        }
+
+        return new org.springframework.security.core.userdetails.User(username, password, grantedAuthorities);
+
+
+    }
 }

@@ -40,4 +40,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AuthorityException.class)
+    public ResponseEntity<ErrorObject> handleAuthorityException (ExerciseNotFoundException err, WebRequest request){
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.BAD_REQUEST.value());
+        errorObject.setMessage(err.getMessage());
+        return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorObject> handleUserNotFoundException (ExerciseNotFoundException err, WebRequest request){
+        ErrorObject errorObject = new ErrorObject();
+        errorObject.setStatusCode(HttpStatus.NOT_FOUND.value());
+        errorObject.setMessage(err.getMessage());
+        return new ResponseEntity<ErrorObject>(errorObject,HttpStatus.NOT_FOUND);
+    }
+
 }
